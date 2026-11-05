@@ -1,1 +1,196 @@
-Имя файла:QR Market
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Maker - Free QR Generator</title>
+<meta name="description" content="Create and download QR codes for free with QR Maker.">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ background:#f4f4f4;
+ color:#111;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:#fff;
+ padding:22px 8%;
+ display:flex;
+ justify-content:space-between;
+ border-bottom:1px solid #ddd;
+}
+.logo{font-size:25px;font-weight:800}
+.logo span{background:#111;color:white;padding:6px;border-radius:5px}
+main{max-width:850px;margin:45px auto;padding:20px}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:40px;margin-bottom:12px}
+.hero p{color:#777}
+.generator{
+ background:white;padding:30px;
+ border-radius:16px;
+ box-shadow:0 5px 30px #0000000b;
+}
+label{display:block;font-weight:bold;margin:15px 0 10px}
+textarea,select{
+ width:100%;padding:14px;
+ border:1px solid #ddd;border-radius:9px;
+ font-size:15px;background:white;
+}
+textarea{height:110px;resize:vertical}
+button{
+ width:100%;padding:15px;border:0;
+ border-radius:9px;background:#111;
+ color:white;font-weight:bold;
+ cursor:pointer;margin-top:20px;
+}
+button:hover{background:#333}
+.ad-space{
+ background:#fff;
+ border:1px dashed #bbb;
+ border-radius:10px;
+ min-height:90px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ margin:25px 0;
+ padding:15px;
+ color:#888;
+ font-size:13px;
+}
+.result{text-align:center;margin-top:25px;display:none}
+#qrcode{
+ display:flex;justify-content:center;
+ padding:20px;margin:20px auto;
+ width:fit-content;background:white;
+ border:1px solid #eee;border-radius:10px;
+}
+footer{
+ text-align:center;padding:30px;
+ color:#777;font-size:13px;
+}
+footer a{color:#555;margin:0 8px}
+@media(max-width:600px){
+ .hero h1{font-size:30px}
+ .generator{padding:20px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo"><span>QR</span> Maker</div>
+ <div>FREE QR GENERATOR</div>
+</header>
+
+<main>
+
+ <section class="hero">
+  <h1>Create your QR code.</h1>
+  <p>Создавай QR-коды бесплатно за несколько секунд.</p>
+ </section>
+
+ <!-- Рекламное место сверху -->
+ <div class="ad-space">
+  <span>Рекламное место</span>
+ </div>
+
+ <section class="generator">
+
+  <label for="qrtext">Введи ссылку или текст</label>
+  <textarea id="qrtext"
+  placeholder="https://example.com"></textarea>
+
+  <label for="size">Размер QR-кода</label>
+  <select id="size">
+   <option value="150">150 px</option>
+   <option value="250" selected>250 px</option>
+   <option value="350">350 px</option>
+  </select>
+
+  <button onclick="generateQR()">CREATE QR CODE</button>
+
+  <div class="result" id="result">
+   <h3>Твой QR-код готов!</h3>
+   <div id="qrcode"></div>
+   <button onclick="downloadQR()">DOWNLOAD PNG</button>
+  </div>
+
+ </section>
+
+ <!-- Рекламное место снизу -->
+ <div class="ad-space">
+  <span>Рекламное место</span>
+ </div>
+
+</main>
+
+<footer>
+ <p>© 2026 QR Maker</p>
+ <p style="margin-top:12px">
+  <a href="about.html">About Us</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <a href="contact.html">Contact</a>
+ </p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+function generateQR(){
+ const text=document.getElementById("qrtext").value.trim();
+ const size=Number(document.getElementById("size").value);
+ const box=document.getElementById("qrcode");
+
+ if(!text){
+  alert("Введи текст или ссылку!");
+  return;
+ }
+
+ if(text.length>2000){
+  alert("Текст слишком длинный!");
+  return;
+ }
+
+ if(typeof QRCode==="undefined"){
+  alert("Проверь подключение к интернету!");
+  return;
+ }
+
+ box.innerHTML="";
+ document.getElementById("result").style.display="block";
+
+ new QRCode(box,{
+  text:text,
+  width:size,
+  height:size,
+  colorDark:"#000000",
+  colorLight:"#ffffff",
+  correctLevel:QRCode.CorrectLevel.H
+ });
+}
+
+function downloadQR(){
+ const box=document.getElementById("qrcode");
+ const canvas=box.querySelector("canvas");
+ const img=box.querySelector("img");
+
+ let url=canvas?canvas.toDataURL("image/png"):
+          img?img.src:"";
+
+ if(!url){
+  alert("Сначала создай QR-код!");
+  return;
+ }
+
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="QR-Maker.png";
+ a.click();
+}
+</script>
+
+</body>
+</html>
